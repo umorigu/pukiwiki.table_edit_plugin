@@ -76,7 +76,7 @@ class EditableTableCell extends Element
 			$text = substr($text, 1);
 		}
 
-		if ($text != '' && $text{0} == '#') {
+		if ($text != '' && $text[0] == '#') {
 			$obj = & Factory_Div($this, $text);
 			if (is_a($obj, 'Paragraph'))
 				$obj = & $obj->elements[0];
@@ -210,7 +210,7 @@ class EditableYTable extends Element
 		preg_match('/^(.*)$/', $last_cell, $matches);
 		$cells[$this->col - 1] = $last_cell = $matches[0];
 		$len = strlen($last_cell);
-		if ($len > 2 && $last_cell{0} == '"' && $last_cell{$len - 1} == '"')
+		if ($len > 2 && $last_cell[0] == '"' && $last_cell[$len - 1] == '"')
 			$cells[$this->col - 1] = str_replace('""', '"', substr($last_cell, 1, -1));
 
 		$row = array();
@@ -569,7 +569,7 @@ function plugin_table_edit_action()
 	$from   = isset($vars['from'])   ? $vars['from']   : '';
 	$table  = isset($vars['table'])  ? $vars['table']  : '';
 	$digest = isset($vars['digest']) ? $vars['digest'] : '';
-	$page   = get_fullname(strip_bracket(array_shift($args)), $refer);
+	$page   = $refer;
 
 	$mode = isset($vars['mode'])? strtolower($vars['mode']) : '';
 	$row  = isset($vars['row'])? $vars['row'] : '0';
