@@ -14,12 +14,12 @@ define('PLUGIN_TABLE_EDIT_DEFAULT_SORT_STRING', ''); // semicolon(:) separated
 //define('PLUGIN_TABLE_EDIT_STRING_DELETE_CHECK', 'delete');
 //define('PLUGIN_TABLE_EDIT_STRING_COPY',         'copy');
 
-define('PLUGIN_TABLE_EDIT_STRING_ADD',          'ди╡ц');
-define('PLUGIN_TABLE_EDIT_STRING_EDIT',         'йт╫╦');
-define('PLUGIN_TABLE_EDIT_STRING_UPDATE',       '╧╧©╥');
-define('PLUGIN_TABLE_EDIT_STRING_DELETE',       '╨О╫Э');
-define('PLUGIN_TABLE_EDIT_STRING_DELETE_CHECK', '╨О╫Э╓нЁнг╖');
-define('PLUGIN_TABLE_EDIT_STRING_COPY',         '©╥╓╥╓╓╧т╓х╓╥╓фди╡ц');
+define('PLUGIN_TABLE_EDIT_STRING_ADD',          'Х©╫Е┼═');
+define('PLUGIN_TABLE_EDIT_STRING_EDIT',         'Г╥╗И⌡├');
+define('PLUGIN_TABLE_EDIT_STRING_UPDATE',       'Ф⌡╢Ф√╟');
+define('PLUGIN_TABLE_EDIT_STRING_DELETE',       'Е┴┼И≥╓');
+define('PLUGIN_TABLE_EDIT_STRING_DELETE_CHECK', 'Е┴┼И≥╓Ц│╝Г╒╨Х╙█');
+define('PLUGIN_TABLE_EDIT_STRING_COPY',         'Ф√╟Ц│≈Ц│└Х║▄Ц│╗Ц│≈Ц│╕Х©╫Е┼═');
 
 //define('PLUGIN_TABLE_EDIT_PLUGIN_NAME', 'read');
 define('PLUGIN_TABLE_EDIT_PLUGIN_NAME', 'table_edit');
