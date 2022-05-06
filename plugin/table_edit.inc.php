@@ -32,12 +32,12 @@ class EditableTablePage extends Element
 {
 	var $pageElements;   // table or string
 
-	function EditableTablePage() {
-		parent::Element();
+	function __construct() {
+		parent::__construct();
 		$this->pageElements = array();
 	}
-	function add($obj) {
-		$this->pageElements[] = & $obj;
+	function & add(& $obj) {
+		$this->pageElements[] = $obj;
 	}
 
 	function toString() {
@@ -53,9 +53,9 @@ class EditableTableCell extends Element
 {
 	var $rawtext;
 
-	function EditableTableCell($text, $is_template = FALSE)
+	function __construct($text, $is_template = FALSE)
 	{
-		parent::Element();
+		parent::__construct();
 		$this->rawtext = $text;
 	}
 
@@ -89,9 +89,9 @@ class EditableTableCell extends Element
 
 class EditableTableEditCell extends Element
 {
-	function EditableTableEditCell($text, $link)
+	function __construct($text, $link)
 	{
-		parent::Element();
+		parent::__construct();
 		$this->rawtext = '[[' . $text . ':' . $link . ']]';
 	}
 	function toString()
@@ -110,9 +110,9 @@ class EditableTable extends Element
 	var $types;
 	var $col; // number of column
 
-	function EditableTable($out)
+	function __construct($out)
 	{
-		parent::Element();
+		parent::__construct();
 
 		$cells	= explode('|', $out[1]);
 		$this->col   = count($cells);
@@ -121,7 +121,7 @@ class EditableTable extends Element
 		$is_template = ($this->type == 'c');
 		$row = array();
 		foreach ($cells as $cell)
-			$row[] = & new EditableTableCell($cell, $is_template);
+			$row[] = new EditableTableCell($cell, $is_template);
 		$this->elements[] = $row;
 	}
 
@@ -175,9 +175,9 @@ class EditableYTableCell extends Element
 {
 	var $rawtext;
 
-	function EditableYTableCell($str)
+	function __construct($str)
 	{
-		parent::Element();
+		parent::__construct();
 		$this->rawtext = $str;
 	}
 	function cellString()
@@ -198,9 +198,9 @@ class EditableYTable extends Element
 {
 	var $col;
 
-	function EditableYTable($line)
+	function __construct($line)
 	{
-		parent::Element();
+		parent::__construct();
 
 		$cells = csv_explode(',', substr($line, 1));
 		$this->col = count($cells);
@@ -217,7 +217,7 @@ class EditableYTable extends Element
 		foreach($cells as $cell) {
 			if ($cell == '""')
 				$cell = '';
-			$row[] = & new EditableYTableCell($cell);
+			$row[] = new EditableYTableCell($cell);
 		}
 		$this->elements[] = $row;
 	}
@@ -274,16 +274,21 @@ function & create_editable_table_page($lines, $from_page, $sort_str='', $append_
 		if ($line[0] == '/' && strlen($line) >= 2 && $line[1] == '/') { // comment line
 			// nothing to do
 		} else if ($line[0] == ',' && $line != ',') { // comma(',') type table
-			$global_cnt++;
+			// $global_cnt++;
 			$new_table = new EditableYTable($line);
 
 			if ($append_edit_cell) {
-				$cnt = count($table->elements) + 1;
+				$cnt = 1;
+				if (! is_null($table)) {
+					if (! is_null($table->elements)) {
+						$cnt = count($table->elements) + 1;
+					}
+				}
 				$table_number = count($tbpage->pageElements);
 				if (strtolower($out[2]) == 'h' || strtolower($out[2]) == 'f') {
-					$new_table->elements[0][] = & new EditableTableEditCell(PLUGIN_TABLE_EDIT_STRING_ADD, get_script_uri()  . '?cmd=' . PLUGIN_TABLE_EDIT_PLUGIN_NAME . '&mode=edit&page=' . rawurlencode($vars['page']) . '&table=' . $table_number . '&row=-1&from=' . rawurlencode($from_page));
+					$new_table->elements[0][] = new EditableTableEditCell(PLUGIN_TABLE_EDIT_STRING_ADD, get_script_uri()  . '?cmd=' . PLUGIN_TABLE_EDIT_PLUGIN_NAME . '&mode=edit&page=' . rawurlencode($vars['page']) . '&table=' . $table_number . '&row=-1&from=' . rawurlencode($from_page));
 				} else {
-					$new_table->elements[0][] = & new EditableTableEditCell(PLUGIN_TABLE_EDIT_STRING_EDIT, get_script_uri() . '?cmd=' . PLUGIN_TABLE_EDIT_PLUGIN_NAME . '&mode=edit&page=' . rawurlencode($vars['page']) . '&table=' . $table_number . '&row=' . ($cnt-1) . '&from=' . rawurlencode($from_page));
+					$new_table->elements[0][] = new EditableTableEditCell(PLUGIN_TABLE_EDIT_STRING_EDIT, get_script_uri() . '?cmd=' . PLUGIN_TABLE_EDIT_PLUGIN_NAME . '&mode=edit&page=' . rawurlencode($vars['page']) . '&table=' . $table_number . '&row=' . ($cnt-1) . '&from=' . rawurlencode($from_page));
 				}
 			}
 
@@ -294,16 +299,21 @@ function & create_editable_table_page($lines, $from_page, $sort_str='', $append_
 				$table = $new_table;
 			}
 		} else if (preg_match('/^\|(.+)\|([hHfFcC]?)$/', $line, $out)) { // bar('|') type table
-			$global_cnt++;
+			// $global_cnt++;
 			$new_table = new EditableTable($out);
 
 			if ($append_edit_cell) {
-				$cnt = count($table->elements) + 1;
+				$cnt = 1;
+				if (! is_null($table)) {
+					if (! is_null($table->elements)) {
+						$cnt = count($table->elements) + 1;
+					}
+				}
 				$table_number = count($tbpage->pageElements);
 				if (strtolower($out[2]) == 'h' || strtolower($out[2]) == 'f') {
-					$new_table->elements[0][] = & new EditableTableEditCell(PLUGIN_TABLE_EDIT_STRING_ADD, get_script_uri()  . '?cmd=' . PLUGIN_TABLE_EDIT_PLUGIN_NAME . '&mode=edit&page=' . rawurlencode($vars['page']) . '&table=' . $table_number . '&row=-1&from=' . rawurlencode($from_page));
+					$new_table->elements[0][] = new EditableTableEditCell(PLUGIN_TABLE_EDIT_STRING_ADD, get_script_uri()  . '?cmd=' . PLUGIN_TABLE_EDIT_PLUGIN_NAME . '&mode=edit&page=' . rawurlencode($vars['page']) . '&table=' . $table_number . '&row=-1&from=' . rawurlencode($from_page));
 				} else {
-					$new_table->elements[0][] = & new EditableTableEditCell(PLUGIN_TABLE_EDIT_STRING_EDIT, get_script_uri() . '?cmd=' . PLUGIN_TABLE_EDIT_PLUGIN_NAME . '&mode=edit&page=' . rawurlencode($vars['page']) . '&table=' . $table_number . '&row=' . ($cnt-1) . '&from=' . rawurlencode($from_page));
+					$new_table->elements[0][] = new EditableTableEditCell(PLUGIN_TABLE_EDIT_STRING_EDIT, get_script_uri() . '?cmd=' . PLUGIN_TABLE_EDIT_PLUGIN_NAME . '&mode=edit&page=' . rawurlencode($vars['page']) . '&table=' . $table_number . '&row=' . ($cnt-1) . '&from=' . rawurlencode($from_page));
 				}
 			}
 
@@ -343,7 +353,7 @@ function & create_editable_table_page($lines, $from_page, $sort_str='', $append_
 
 function plugin_table_edit_cmp($x, $y, $sort_col_str)
 {
-	$a = split(":", $sort_col_str);
+	$a = explode(":", $sort_col_str);
 
 	for ($i = 0; $i < count($a); ++$i) {
 		if ( ! preg_match('/^([0-9]+)([rns]+)?$/i', trim($a[$i]), $matches)) return 0;
@@ -492,7 +502,7 @@ function plugin_table_edit_action_edit($page, $from_page, $table_id, $row, $dige
 	global $vars, $_btn_notchangetimestamp;
 	$tblpage = & create_editable_table_page(get_source($page), $from_page);
 	$body = '<form action="' . get_script_uri() . '?cmd=' . PLUGIN_TABLE_EDIT_PLUGIN_NAME . '&mode=post&from=' . rawurlencode($from_page) . '&table=' . $table_id . '&row=' . $row . '&page=' . rawurlencode($vars['page']) . '&digest=' . $digest . '" method="post">';
-	$body .= $root;
+	// $body .= $root;
 	$j = 0;
 	$table = & $tblpage->pageElements[$table_id];
 
@@ -553,7 +563,7 @@ function plugin_table_check_collision($page, $digest, $src)
 //function plugin_read_action()
 function plugin_table_edit_action()
 {
-	global $vars, $referer;
+	global $vars, $referer, $_title_add;
 
 	$refer  = isset($vars['page'])   ? $vars['page']   : '';
 	$from   = isset($vars['from'])   ? $vars['from']   : '';
@@ -615,5 +625,3 @@ function plugin_table_edit_action()
 		}
 	}
 }
-
-?>
